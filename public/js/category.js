@@ -459,7 +459,7 @@ var globalObj={};//global object which having the all selected value
  /* ----------------------------------   CKEDITOR WORK FOR WITH AJAX STARTS-----------------------------------------------------*/
     CKEDITOR.replace( 'editor1');
     CKEDITOR.config.width="100%";
-    CKEDITOR.config.height="230px"; 
+    CKEDITOR.config.height="210px"; 
 
    var postData=[];
    $('form').on("submit", function(e){

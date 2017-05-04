@@ -208,3 +208,29 @@ button
     box-sizing: content-box;
    float: right;
 }
+.refresh
+{
+   padding: 5px;
+    display: inline;
+    border-radius: 2px;
+    font-family: "Arial";
+    border: 0;
+    color: #000;
+    margin: 1px;
+    background: #337ab7;
+    font-size: 12px;
+    line-height: 15px;
+    color: #fff;
+    width: auto;
+    height: auto;
+    box-sizing: content-box;
+   float: right;
+}
+.iconred
+{
+  color: red;
+}
+.iconblue
+{
+  color: blue;
+}

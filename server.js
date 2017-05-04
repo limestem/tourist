@@ -38,8 +38,9 @@
 
 
   require('./server/routes/index' )( app );
+  require('./server/routes/auditor' )( app );
 
-  app.set('port', process.env.PORT || 50);
+  app.set('port', process.env.PORT || 8080);
  
   var server = app.listen(app.get('port'),function() {
     console.log('Express server listening on port ' + server.address().port);

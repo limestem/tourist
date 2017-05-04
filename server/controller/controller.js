@@ -414,7 +414,7 @@ exports.getSiteseen=function(data,callback){
 /*--------------------------------------------api to get the siteseen from category.js-----------------------------*/
 /*------------------------------------api to update the siteseen from category.js-----------------------------*/
 exports.updateSiteSeen=function(data,callback){
-     console.log("siteseen1:"+JSON.stringify(data));
+     //console.log("siteseen1:"+JSON.stringify(data));
      var query = 'UPDATE siteseen SET content = ?, keywords =?, tags=?, end_time=?, status=? WHERE country=? AND state=? AND city=? AND location=? AND sitename=? AND editor_name=? ';
 	connection.query(query,[data.editor1,data.keywords,data.tags,data.end_time,data.status,data.country,data.state,data.city,data.location,data.sitename,data.editor_name],function (err, result) {
 	  	//console.log(result);
@@ -496,7 +496,90 @@ exports.workStatus=function(data,callback)
 };
 
 /* --------------######  here api is ended for ananlytics page ######------------------------------------*/
+/*-----------5.when clicked at auditor colmun in status tab this api will fire---------------------------*/
+exports.gettotalinspector=function(data,callback)
+{
+	q='SELECT * FROM login where role="investigator"';
 
+	  connection.query(q, function(err, result) { 
+	  	
+	 	callback(result);
+	  });
+};
+exports.assignedInpector=function(data,callback)
+{
+	console.log("inspector:"+JSON.stringify(data));
+	q='UPDATE siteseen SET auditor = ? WHERE id=? ';
+
+	  connection.query(q,[data.inpectorname,data.id],function(err, result) { 
+	  	connection.query('SELECT * FROM siteseen', function(err, data) { 
+	 	callback(data);
+	    });
+	  });
+};
+
+/*----------6.this api will get all data from inpectorDb which is finalized by inpector------------------------*/
+exports.inspectData=function(data,callback)//get data into verify tab
+{
+	q='SELECT * FROM inpectorDb where adminStatus=0';
+
+	  connection.query(q, function(err, result) { 
+	  	
+	 	callback(result);
+	  });
+};
+exports.getData=function(data,callback)//get data into editor
+{
+	q='SELECT * FROM inpectorDb where id='+data.id+'';
+
+	  connection.query(q, function(err, result) { 
+	  	
+	 	callback(result);
+	  });
+};
+
+/*-----7. this api update and save data into based at button click in  inpectordb $ finalDb-----*/
+exports.UpdateinpectorDb=function(data,callback){
+	 //console.log("inpectorDbUpdate:"+JSON.stringify(data));
+    var query = 'UPDATE inpectorDb SET content = ?, keywords =?, tags=? WHERE id=? ';
+	connection.query(query,[data.editor1,data.keywords,data.tags,data.id],function (err, result) {
+	  	//console.log(result);
+	  	//console.log(err);
+	 	callback(result);
+	 });
+	
+};
+
+exports.insertIntoFinalDb=function(data,callback){
+	 //console.log("finaldatabase:"+JSON.stringify(data));
+
+	 var input = JSON.parse(JSON.stringify(data));
+	 var query = {
+            country    : input.country,
+            state      : input.state,
+            city       : input.city,
+            location   : input.location,
+            sitename   : input.sitename,
+            content    : input.editor1,
+            keywords   : input.keywords,
+            tags       : input.tags,
+        };
+
+    q='SELECT id,country,state,city,location,sitename,auditor_name FROM inpectorDb WHERE adminStatus = 0';
+ //console.log("query:"+JSON.stringify(query));
+	connection.query("INSERT INTO finalDb set ? ",query,function(err, result) { 
+	  	   connection.query('UPDATE inpectorDb SET adminStatus = 1 WHERE id=? ',[data.id],function (err, result1) {
+			  	//console.log(result);
+	             connection.query(q,function (err,data){
+
+				  	//console.log(err);
+				 	callback(data);
+				   });
+
+			});
+	 });
+	
+};
 
 
 

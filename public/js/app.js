@@ -32,7 +32,7 @@ var totalcategory;
  $("#addcategorymodel").on('click','#submit',function() {
   	 
      var value= $('#addcategorymodel #category').val() ;
-     alert(value);
+     //alert(value);
           
     $.ajax({
 		    url : "/addcategory",
@@ -270,14 +270,20 @@ $('#addcountrylist').on('click','.countrycode',function()
 		    data : {state:trid,assigned_to:assignedName,assigned_date:assignedDate,country:clickedcountry},
 		    success: function(data)
 		    {
+		    	console.log("assignState:"+JSON.stringify(data));
 		       var category_list='';
+                var modelbody='';
+                	modelbody+='<span class="refresh refresh1  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+                	modelbody+=' <span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br><div class="table-responsive"> <table class="table table-bordered myTable scroll" id=""> <thead> <tr class="myHead"><th>Sn</th> <th>Name</th><th>State</th><th>Country</th><th>assignDate</th> <th>Category</th></tr> </thead> <tbody id="addassignstate1">';
 
+ 	        var addstate1='';
             for( var i=0;i<data.length;i++)
 	        {    
+
 	        	 category_list='';
 	        	 category_list=data[i].category_list;
-	        	 var addstate1='';
-	        	 addstate1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+	       
+	        	 addstate1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
                   
 
                   $.each($.parseJSON(category_list), function(k, v) {
@@ -286,10 +292,16 @@ $('#addcountrylist').on('click','.countrycode',function()
 	               });
 
                   addstate1+='</td> </tr>';
-
-                  $('#previewmodel #addassignstate1').append(addstate1);
+ 
 	        }
+	        modelbody+=addstate1;
+	        modelbody+=' </tbody></table>   </div>';
+                      
+	        $("#stateassign").empty();
+	        $("#stateassign").html(modelbody);
+                                   
 	        pagination("stateassign");
+                        
 		    }
 		   });
 
@@ -325,6 +337,9 @@ $('.modalassignstateitem').on('click','#submit60',function()
   	 var trid=$("#submit60").data("trid");
      //alert("selected state"+trid);
      $('#previewmodel #addassignstate1').empty();
+    $('#previewmodel').find('.next').removeClass('disabled');
+    $('#previewmodel').find('.prev').removeClass('disabled');
+
 
   	 var assigned_to=$("#editorName option:selected").val();;
      //alert( "assigned_to:"+assigned_to );
@@ -341,26 +356,38 @@ $('.modalassignstateitem').on('click','#submit60',function()
 		    data : {state:trid,assigned_to:assigned_to,category:category},
 		    success: function(data, textStatus)
 		    {
-		        var category_list='';
+		    	console.log("updateassignState:"+JSON.stringify(data));
+		       var category_list='';
+                var modelbody='';
+                	modelbody+='<span class="refresh refresh1  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+                	modelbody+=' <span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br><div class="table-responsive"> <table class="table table-bordered myTable scroll" id=""> <thead> <tr class="myHead"><th>Sn</th> <th>Name</th><th>State</th><th>Country</th><th>assignDate</th> <th>Category</th></tr> </thead> <tbody id="addassignstate1">';
 
-            for( var i=0;i<data.length;i++)
-	        {    
-	        	 category_list='';
-	        	 category_list=data[i].category_list;
-	        	 var addstate1='';
-	        	 addstate1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
-                  
+	 	        var addstate1='';
+	            for( var i=0;i<data.length;i++)
+		        {    
 
-                  $.each($.parseJSON(category_list), function(k, v) {
-                         addstate1+=' <span id="category">'+v+'</span>';
-                      
-	               });
+		        	 category_list='';
+		        	 category_list=data[i].category_list;
+		       
+		        	 addstate1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+	                  
 
-                  addstate1+='</td> </tr>';
+	                  $.each($.parseJSON(category_list), function(k, v) {
+	                         addstate1+=' <span id="category">'+v+'</span>';
+	                      
+		               });
 
-                  $('#previewmodel #addassignstate1').append(addstate1);
-	        }
-	        pagination("stateassign");
+	                  addstate1+='</td> </tr>';
+	 
+		        }
+		        modelbody+=addstate1;
+		        modelbody+=' </tbody></table>   </div>';
+	                      
+		        $("#stateassign").empty();
+		        $("#stateassign").html(modelbody);
+	                                   
+		        pagination("stateassign");
+                        
 		    }
 		   });
 
@@ -527,7 +554,6 @@ $('.modalassigncityitem').on('click','#submit61',function()
   {
   	 var trid=$("#submit61").data("trid");
      //alert("selected city:"+trid);
-     $('#previewmodel #addassigncity1').empty();
 
   	 var assigned_to=$("#editorNamecity option:selected").val();;
      //alert( "assigned_to:"+assigned_to );
@@ -543,29 +569,36 @@ $('.modalassigncityitem').on('click','#submit61',function()
 		    data : {city:trid,assigned_to:assigned_to,category:category},
 		    success: function(data, textStatus)
 		    {
+		    	console.log("updateassignState:"+JSON.stringify(data));
 		         var category_list='';
+		         var modelbody1='';
+		         modelbody1+='<span class="refresh refresh2  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+		         modelbody1+='<span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search3" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br> <div class="table-responsive"> <table class="table table-bordered myTable3 scroll" id=""> <thead><tr class="myHead3"><th>Sn</th> <th>Name</th><th>City</th><th>State</th><th>Country</th><th>assignDate</th><th>Category</th></tr></thead><tbody id="addassigncity1">';
 
-			        for( var i=0;i<data.length;i++)
-			          {    
-			        //      category_list='';
-			              category_list=data[i].category_list;
-			             var addcity1='';
-			             addcity1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
-			                  
+                var addcity1='';
+		        for( var i=0;i<data.length;i++)
+		          {    
+		        //      category_list='';
+		              category_list=data[i].category_list;
+		             
+		             addcity1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+		                  
 
-			                  $.each($.parseJSON(category_list), function(k, v) {
-			                         addcity1+=' <span id="category">'+v+'</span>';
-			                      
-			                 });
+		                  $.each($.parseJSON(category_list), function(k, v) {
+		                         addcity1+=' <span id="category">'+v+'</span>';
+		                      
+		                 });
+		                  addcity1+='</td> </tr>';
 
-			                  addcity1+='</td> </tr>';
 
-			                  //console.log( "assigncity for category:"+category_list );
+		          }
+		             modelbody1+=addcity1;
+			        modelbody1+=' </tbody></table></div>';
+		                      
+			        $("#cityassign").empty();
+			        $("#cityassign").html(modelbody1);	       
+		           pagination("cityassign");
 
-			                  $('#addassigncity1').append(addcity1);
-			          }
-			       
-			           pagination("cityassign");
 		    }
 		   });
 })
@@ -596,7 +629,6 @@ $('#addcitylist').on('click', '.clickassigncity', function(){
 $(".modalassignCity").on('click','#submit51',function(e)
   {
   	var trid=$("#submit51").data("trid");
-  	$('#previewmodel #addassigncity1').empty();
     // alert("selected city"+trid);
     // alert( "countryname for this city:"+clickedcountry);
     // alert( "statename for this city:"+clickedstate);
@@ -609,16 +641,21 @@ $(".modalassignCity").on('click','#submit51',function(e)
 		    url : "/assignedCity",
 		    type: "POST",
 		    data : {city:trid,assigned_to:assignedName,assigned_date:assignedDate,country:clickedcountry,state:clickedstate},
-		    success: function(data, textStatus)
-		    {
+		    success: function(data)
+		    {   
+		    	console.log("assigncity:"+JSON.stringify(data));
 		         var category_list='';
+		         var modelbody1='';
+		         modelbody1+='<span class="refresh refresh2  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+		         modelbody1+='<span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search3" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br> <div class="table-responsive"> <table class="table table-bordered myTable3 scroll" id=""> <thead><tr class="myHead3"><th>Sn</th> <th>Name</th><th>City</th><th>State</th><th>Country</th><th>assignDate</th><th>Category</th></tr></thead><tbody id="addassigncity1">';
 
+                var addcity1='';
 		        for( var i=0;i<data.length;i++)
 		          {    
 		        //      category_list='';
 		              category_list=data[i].category_list;
-		             var addcity1='';
-		             addcity1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+		             
+		             addcity1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
 		                  
 
 		                  $.each($.parseJSON(category_list), function(k, v) {
@@ -626,12 +663,15 @@ $(".modalassignCity").on('click','#submit51',function(e)
 		                      
 		                 });
 
-		                  addcity1+='</td> </tr>';
+		                   addcity1+='</td> </tr>';
 
-		                  //console.log( "assigncity for category:"+category_list );
-
-		                  $('#previewmodel #addassigncity1').append(addcity1);
 		          }
+		             modelbody1+=addcity1;
+			        modelbody1+='</tbody></table></div>';
+		                      
+			        $("#cityassign").empty();
+			        $("#cityassign").html(modelbody1);
+
 		       
 		           pagination("cityassign");
 
@@ -773,14 +813,18 @@ $('.modalassignlocitem').on('click','#submit62',function()
 		    data : {location:trid,assigned_to:assigned_to,category:category},
 		    success: function(data)
 		    {
-		        //data - response from server
 		        var category_list='';
+		        var modelbody='';
+                	modelbody+='<span class="refresh refresh1  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+                	modelbody+='<span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search2" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br><div class="table-responsive"> <table class="table table-bordered myTable2 scroll"><thead><tr class="myHead2"><th>Sn</th><th>Name</th><th>Location</th><th>City</th><th>State</th><th>Country</th><th>assignDate</th><th>Category</th> </tr></thead><tbody id="addassignloc1">';
 
+
+                    var addloc1='';
 			        for( var i=0;i<data.length;i++)
 			          {    
 			             category_list=data[i].category_list;
-			             var addloc1='';
-			             addloc1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].location+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+			             
+			             addloc1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].location+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
 			                  
 
 			                  $.each($.parseJSON(category_list), function(k, v) {
@@ -789,9 +833,14 @@ $('.modalassignlocitem').on('click','#submit62',function()
 			                 });
 
 			                  addloc1+='</td> </tr>';
-			                  $('#previewmodel #addassignloc1').append(addloc1);
 			                 
 			          }
+						modelbody+=addloc1;
+				        modelbody+=' </tbody></table>   </div>';
+			                      
+				        $("#locationassign").empty();
+				        $("#locationassign").html(modelbody);
+
 			       
 			        pagination("locationassign");
 		    }
@@ -896,12 +945,17 @@ $(".modalassignLoc").on('click','#submitloc',function(e)
 		    success: function(data)
 		    {
 		        var category_list='';
+		        var modelbody='';
+                	modelbody+='<span class="refresh refresh1  btn btn-primary "><i class="fa fa-refresh"  aria-hidden="true"></i></span>';
+                	modelbody+='<span class="next  btn btn-rounded "><i class="fa fa-angle-double-right"></i> Next</span><span class="prev btn btn-rounded"><i class="fa fa-angle-double-left"></i> Previous</span><span class="" style="float:left;font-size: 12px; "><input type="text" id="search2" class="form-control" placeholder="Search" style="height:28px;" /></span> <br><br><div class="table-responsive"> <table class="table table-bordered myTable2 scroll"><thead><tr class="myHead2"><th>Sn</th><th>Name</th><th>Location</th><th>City</th><th>State</th><th>Country</th><th>assignDate</th><th>Category</th> </tr></thead><tbody id="addassignloc1">';
 
+
+                    var addloc1='';
 			        for( var i=0;i<data.length;i++)
 			          {    
 			             category_list=data[i].category_list;
-			             var addloc1='';
-			             addloc1='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].location+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
+			             
+			             addloc1+='<tr><td></td><td>'+data[i].assigned_to+'</td><td>'+data[i].location+'</td><td>'+data[i].city+'</td><td>'+data[i].state+'</td><td>'+data[i].country+'</td><td>'+data[i].assigned_date+'</td><td>';
 			                  
 
 			                  $.each($.parseJSON(category_list), function(k, v) {
@@ -910,9 +964,14 @@ $(".modalassignLoc").on('click','#submitloc',function(e)
 			                 });
 
 			                  addloc1+='</td> </tr>';
-			                  $('#previewmodel #addassignloc1').append(addloc1);
 			                 
 			          }
+						modelbody+=addloc1;
+				        modelbody+=' </tbody></table>   </div>';
+			                      
+				        $("#locationassign").empty();
+				        $("#locationassign").html(modelbody);
+
 			       
 			        pagination("locationassign");
 		    }
@@ -965,6 +1024,8 @@ $('#addlocationlist').on('click', '.list-group-item.DeleteLoc', function(){
 		    success: function(data, textStatus)
 		    {
 		        totaleditor=data;
+		        $('#register').modal('hide');
+
 		    }
 		 });
 
@@ -1050,8 +1111,6 @@ $('#'+refer+' table').each(function() {
   });
 });//pagination
 };
-/*---------------------this function work with pagination for table-------------------------------------------*/
-
-
+/*---------------------this function work with pagination for table----------------------------------------*/
 
 });

@@ -20,6 +20,8 @@ function restrict_user(req, res, next) {
         res.render('view/category');
     } else if ((req.session.username) && (req.session.role == 'admin')) {
         res.render('view/dashbord');
+    }else if ((req.session.username) && (req.session.role == 'investigator')) {
+        res.render('view/investigator');
     }else{
         res.redirect('/');
     }
@@ -78,25 +80,23 @@ app.post('/upload', multipartMiddleware, function(req, res) {
     router.post('/login', function(req, res) {
 	    //console.log(JSON.stringify(req.body));
         severfile.login(req.body,function(data){
-           // console.log("response data:"+JSON.stringify(data));
+           //console.log("response data:"+JSON.stringify(data));
            for(var i=0;i<data.length;i++)
            {
             if(data[i]!=null)
             {
-               // console.log("name:"+JSON.stringify(data[i].username));
-               // console.log("role:"+JSON.stringify(data[i].role));
-
                req.session.username = data[i].username;
                req.session.password = data[i].password;
                req.session.role = data[i].role;
 		           res.json(true);
                
             }
-            else
+           }
+
+            if(data.length==0)
             {
                 res.json(false);
             }
-           }
          });      
     });
 
@@ -436,6 +436,46 @@ router.post('/updateSiteSeen', function(req, res) {
 
 
 /* --------------######  here api is ended for ananlytics page ######------------------------------------*/
+/*-----------5.when clicked at auditor colmun in status tab this api will fire-------------------------*/
+router.get('/gettotalinspector', function(req, res) {
+           // console.log("cmgcountry:"+JSON.stringify(req.body));
+            severfile.gettotalinspector(req.body,function(data){
+                res.json(data);
+            });
+    });
+router.post('/assignedInpector', function(req, res) {
+           
+            severfile.assignedInpector(req.body,function(data){
+                res.json(data);
+            });
+    });
+/*----------6.this api will get all data from inpectorDb which is finalized by inpector------------------------*/
+router.get('/inspectData', function(req, res) {
+           
+            severfile.inspectData(req.body,function(data){
+                res.json(data);
+            });
+    });
+router.post('/getData', function(req, res) {
+           
+            severfile.getData(req.body,function(data){
+                res.json(data);
+            });
+    });
+/*-----7. this api update and save data into based at button click in  inpectordb $ finalDb-----*/
+router.post('/UpdateinpectorDb', function(req, res) {
+           
+            severfile.UpdateinpectorDb(req.body,function(data){
+                res.json(data);
+            });
+});
+
+router.post('/insertIntoFinalDb', function(req, res) {
+           
+            severfile.insertIntoFinalDb(req.body,function(data){
+                res.json(data);
+            });
+});
 
 app.use('/',router);
 }
